@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import vn.edu.tdmu.appdoctruyen.data.DatabaseDocTruyen;
+import vn.edu.tdmu.appdoctruyen.model.TaiKhoan;
 
 public class DangNhap extends AppCompatActivity {
 
@@ -18,7 +20,7 @@ public class DangNhap extends AppCompatActivity {
     Button btnDangNhap, btnDangKy;
 
     DatabaseDocTruyen databaseDocTruyen;
-
+    TaiKhoan t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,40 +40,45 @@ public class DangNhap extends AppCompatActivity {
         btnDangNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tentaikhoan = edtTaiKhoan.getText().toString();
-                String matkhau = edtMatKhau.getText().toString();
+                if(isUser(edtTaiKhoan.getText().toString(),edtMatKhau.getText().toString())){
+                    int phanquyen = t.getmPhanQuyen();
+                    int idd = t.getmId();
+                    String tentk = t.getmTenTaiKhoan();
+                    String email = t.getmEmail();
+                    Intent intent = new Intent(DangNhap.this,MainActivity.class);
 
-                Cursor cursor = databaseDocTruyen.getData();
-                while (cursor.moveToNext()){
-                    String datatentaikhoan = cursor.getString(1);
-                    String datamatkhau = cursor.getString(2);
+                    intent.putExtra("phanq",phanquyen);
+                    intent.putExtra("idd",idd);
+                    intent.putExtra("email",email);
+                    intent.putExtra("tentaikhoan",tentk);
 
-                    if(datatentaikhoan.equals(tentaikhoan) && datamatkhau.equals(matkhau)){
-                        int phanquyen = cursor.getInt(4);
-                        int idd = cursor.getInt(0);
-                        String tentk = cursor.getString(1);
-                        String email = cursor.getString(3);
-
-
-                        Intent intent = new Intent(DangNhap.this,MainActivity.class);
-
-                        intent.putExtra("phanq",phanquyen);
-                        intent.putExtra("idd",idd);
-                        intent.putExtra("email",email);
-                        intent.putExtra("tentaikhoan",tentk);
-
-                        startActivity(intent);
-                        Log.e("Đăng nhập : ","Thành công");
-                    }
-                    else{
-                        Log.e("Đăng nhập : ","Khoong Thành công");
-                    }
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplication(),"Đăng nhập :Không thành công",Toast.LENGTH_LONG).show();
                 }
 
-                cursor.moveToFirst();
-                cursor.close();
-            }
+
+                }
         });
+    }
+    public boolean isUser(String TaiKhoan, String MatKhau){
+        try {
+            Cursor cursor = databaseDocTruyen.getData();
+            while (cursor.moveToNext()){
+                String datatentaikhoan = cursor.getString(1);
+                String datamatkhau = cursor.getString(2);
+
+                if(datatentaikhoan.equals(TaiKhoan) && datamatkhau.equals(MatKhau)){
+                    t = databaseDocTruyen.getTaiKhoan(cursor.getInt(0));
+                    return true;
+                }
+
+
+            }
+        }catch (Exception e){
+
+        }
+        return true;
     }
     private void Init() {
         edtTaiKhoan = findViewById(R.id.taikhoan);

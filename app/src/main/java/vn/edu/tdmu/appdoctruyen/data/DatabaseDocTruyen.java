@@ -16,7 +16,7 @@ import vn.edu.tdmu.appdoctruyen.model.Truyen;
 
 public class DatabaseDocTruyen extends SQLiteOpenHelper {
 
-    private static String DATABASE_NAME = "doctruyen";
+    private static final String DATABASE_NAME = "doctruyen";
     private static String TABLE_TAIKHOAN = "taikhoan";
     private static String ID_TAI_KHOAN = "idtaikhoan";
     private static String TEN_TAI_KHOAN = "tentaikhoan";
@@ -248,7 +248,19 @@ public class DatabaseDocTruyen extends SQLiteOpenHelper {
         Cursor res =  db.rawQuery( "select * from "+TABLE_TAIKHOAN , null );
         return res;
     }
+    public TaiKhoan getTaiKhoan(int id){
+        TaiKhoan t;
+        Cursor c = getData();
+        while (c.moveToNext()){
+            if(c.getInt(0) == id){
+                t = new TaiKhoan(c.getString(1),c.getString(2),c.getString(3),c.getInt(4));
+                return t;
+            }
+        }
 
+
+        return null;
+    }
 
 
     //Thêm truyện
