@@ -35,8 +35,9 @@ public class Admin extends Activity {
     DatabaseDocTruyen databaseDocTruyen;
 
     int posselected = -1;
-    public static  final int ADD = 113;
-    public static final int EDIT = 114;
+    public static  final int ADD = 1;
+    public static final int EDIT = 2;
+    public static  final int SAVE = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,21 @@ public class Admin extends Activity {
                 int id = intent.getIntExtra("Id", 0);
                 Intent intent1 = new Intent(Admin.this, ThemTruyen.class);
                 intent.putExtra("Id", id);
-                startActivity(intent1);
+                adaptertruyen.notifyDataSetChanged();
+                startActivityForResult(intent1,ADD);
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(Admin.this,NoiDung.class);
+                String tent =   TruyenArrayList.get(position).getTenTruyen();
+                String noidungt = TruyenArrayList.get(position).getNoiDung();
+                intent.putExtra("tentruyen",tent);
+                intent.putExtra("noidung",noidungt);
+                //Log.e("Tên truyện : ",tent);
+                startActivity(intent);
             }
         });
     }
@@ -85,19 +100,44 @@ public class Admin extends Activity {
                 bundle.putSerializable("truyen",truyen);
 
                 intent.putExtra("data",bundle);
-                startActivity(intent);
+                startActivityForResult(intent,EDIT);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case ADD:{
+                if(resultCode == SAVE){
+                    Bundle bundle = data.getBundleExtra("data");
+                    Truyen truyen = (Truyen) bundle.getSerializable("truyen");
+                    TruyenArrayList.add(truyen);
+                    adaptertruyen.notifyDataSetChanged();
+                }
+                break;
+            }
+            case EDIT:{
+                if(resultCode == SAVE){
+                    Bundle bundle = data.getBundleExtra("data");
+                    Truyen truyen = (Truyen) bundle.getSerializable("truyen");
+                    TruyenArrayList.set(posselected,truyen);
+                    adaptertruyen.notifyDataSetChanged();
+                }
+                break;
+            }
+        }
+    }
+
     public void confirmDelete(){
         AlertDialog.Builder al = new AlertDialog.Builder(this);
-        al.setTitle("Xac nhan de xoa!!!");
-        al.setMessage("Ban co chac xoa truyen nay");
+        al.setMessage("Bạn có chắc muốn xóa truyện này?");
         al.setCancelable(false);
-        al.setPositiveButton("Dong y", new DialogInterface.OnClickListener() {
+        al.setPositiveButton("Có", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 int idtruyen = TruyenArrayList.get(posselected).getID();
@@ -109,7 +149,7 @@ public class Admin extends Activity {
                 Toast.makeText(Admin.this,"Xóa truyện thành công",Toast.LENGTH_SHORT).show();
             }
         });
-        al.setNegativeButton("Khong dong y", new DialogInterface.OnClickListener() {
+        al.setNegativeButton("Không", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

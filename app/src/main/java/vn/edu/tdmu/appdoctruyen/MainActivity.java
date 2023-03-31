@@ -1,11 +1,13 @@
 package vn.edu.tdmu.appdoctruyen;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else if(position == 1){
-                    finish();
+                    exit();
                 }
             }
         });
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         //set nút của toolbar là true
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Tạo icon cho toolbar
-        toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size   );
+        toolbar.setNavigationIcon(android.R.drawable.ic_menu_sort_by_size);
 
         //Tạo sự kiện click cho toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -145,7 +147,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void exit(){
+        AlertDialog.Builder al = new AlertDialog.Builder(this);
+        al.setCancelable(false);
+        al.setMessage("Bạn có muốn đăng xuất?");
+        al.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        al.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        AlertDialog alertDialog = al.create();
+        alertDialog.show();
 
+    }
     //Tạo Flipper quảng cáo
     private void ActionViewFlipper() {
         //Mảng chứa các tấm hình

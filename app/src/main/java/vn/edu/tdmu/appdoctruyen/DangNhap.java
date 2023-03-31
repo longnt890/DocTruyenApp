@@ -54,9 +54,8 @@ public class DangNhap extends AppCompatActivity {
 
                     startActivity(intent);
                 }else{
-                    Toast.makeText(getApplication(),"Đăng nhập :Không thành công",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplication(),"Sai tên đăng nhập hoặc mật khẩu",Toast.LENGTH_LONG).show();
                 }
-
 
                 }
         });
@@ -78,7 +77,7 @@ public class DangNhap extends AppCompatActivity {
         }catch (Exception e){
 
         }
-        return true;
+        return false;
     }
     private void Init() {
         edtTaiKhoan = findViewById(R.id.taikhoan);

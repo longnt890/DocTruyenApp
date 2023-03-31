@@ -19,7 +19,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarmanhinhchinh"
                 app:title="Tủ Truyện"
-                android:background="#FFFFFF"
+                android:background="#0CC1D8"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
 

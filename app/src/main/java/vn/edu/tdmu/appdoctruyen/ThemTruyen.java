@@ -60,16 +60,20 @@ public class ThemTruyen extends AppCompatActivity {
                 String img = edtAnh.getText().toString();
 
                 Truyen truyen = CreatTruyen();
-
+                Bundle bundle = new Bundle();
+                Intent intent = getIntent();
                 if(tentruyen.equals("") || noidung.equals("") || img.equals("")){
                     Toast.makeText(ThemTruyen.this,"Yêu cầu nhập đầy đủ thông tin",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     databaseDocTruyen.AddTruyen(truyen);
-                    Intent intent = new Intent(ThemTruyen.this,Admin.class);
+                    bundle.putSerializable("truyen",truyen);
+                    intent.putExtra("data",bundle);
+                    setResult(Admin.SAVE,intent);
+
+                    Toast.makeText(ThemTruyen.this,"Thêm truyện thành công",Toast.LENGTH_SHORT).show();
                     finish();
-                    startActivity(intent);
-                    //Toast.makeText(ThemTruyen.this,"Thêm truyện thành công",Toast.LENGTH_SHORT).show();
+
                     //Log.e("Thêm truyện : ","Thành công");
                 }
             }

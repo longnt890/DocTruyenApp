@@ -47,7 +47,7 @@ public class DangKy extends AppCompatActivity {
                     //Kiểm tra xem trùng tài khoản không để có thể hiển thị thông báo tài khoản trùng
 
                     databaseDocTruyen.AddTaiKhoan(taikhoan1);
-                    //Toast.makeText(DangKy.this,"Đăng ký thành công ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DangKy.this,"Đăng ký thành công ",Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -56,7 +56,8 @@ import vn.edu.tdmu.appdoctruyen.model.Truyen;
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Bundle bundle = new Bundle();
+                Intent intent = getIntent();
                 if(edtTieuDe.equals("") || edtNoiDung.equals("") || edtAnh.equals("")){
                     Toast.makeText(SuaTruyen.this,"Yêu cầu nhập đầy đủ thông tin",Toast.LENGTH_SHORT).show();
                 }
@@ -65,9 +66,10 @@ import vn.edu.tdmu.appdoctruyen.model.Truyen;
                     truyen.setAnh(edtAnh.getText().toString());
                     truyen.setNoiDung(edtNoiDung.getText().toString());
                     databaseDocTruyen.UpdateTruyen(truyen);
-                    Intent intent = new Intent(SuaTruyen.this, Admin.class);
+                    bundle.putSerializable("truyen",truyen);
+                    intent.putExtra("data",bundle);
+                    setResult(Admin.SAVE,intent);
                     finish();
-                    startActivity(intent);
                 }
             }
         });
